@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Alarm CPU Usage",
+    "source": "Server 1",
+    "metric": "CPU_USAGE",
+    "greater": true,
+    "trigger": "0.8",
+    "active" : false
+  },
+  {
+    "name": "Alarm GPU Usage",
+    "source": "Server 1",
+    "metric": "GPU_USAGE",
+    "greater": true,
+    "trigger": "0.9",
+    "active" : true
+  },
+  {
+    "name": "Alarm GPU Temp",
+    "source": "Server 1",
+    "metric": "GPU_TEMP",
+    "greater": true,
+    "trigger": "85.0",
+    "active" : true
+  }
+]

@@ -9,19 +9,28 @@ class AlarmScreen extends StatelessWidget {
         return Center(child: DataTable(
           columns: [
             DataColumn(label: Text("Name")),
-            DataColumn(label: Text("asd"))
+            DataColumn(label: Text("Source")),
+            DataColumn(label: Text("Metric")),
+            DataColumn(label: Text("Trigger")),
+            DataColumn(label: Text("Paused")),
           ],
           rows: [
             DataRow(
-              cells: [
-                DataCell(Text("alarma 1")),
-                DataCell(Text("asd")),
+              cells: [//todo: do a map with json data
+                DataCell(Text("Alarm 1")),
+                DataCell(Text("Server 1")),
+                DataCell(Text("CPU Usage")),
+                DataCell(Text(">80%")),
+                DataCell(Text("True")),
               ]
             ),
             DataRow(
                 cells: [
-                  DataCell(Text("alarma 2")),
-                  DataCell(Text("asd 2")),
+                  DataCell(Text("Alarm 2")),
+                  DataCell(Text("Server 1")),
+                  DataCell(Text("GPU Usage")),
+                  DataCell(Text(">90%")),
+                  DataCell(Text("False")),
                 ]
             ),
           ],
