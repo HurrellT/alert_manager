@@ -4,7 +4,8 @@
     "source": "Server 1",
     "metric": "CPU_USAGE",
     "greater": true,
-    "trigger": "0.8",
+    "trigger": 0.8,
+    "isTemp": false,
     "active" : false
   },
   {
@@ -12,7 +13,8 @@
     "source": "Server 1",
     "metric": "GPU_USAGE",
     "greater": true,
-    "trigger": "0.9",
+    "trigger": 0.9,
+    "isTemp": false,
     "active" : true
   },
   {
@@ -20,7 +22,8 @@
     "source": "Server 1",
     "metric": "GPU_TEMP",
     "greater": true,
-    "trigger": "85.0",
+    "trigger": 0.85,
+    "isTemp": true,
     "active" : true
   }
 ]

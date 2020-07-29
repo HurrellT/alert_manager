@@ -42,6 +42,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return BaseWidget(
       builder: (context, sizingInformation) {
         return Scaffold(
+            floatingActionButton: _selectedIndex == 1
+                ? FloatingActionButton(
+                    onPressed: () {
+                      //add alarm
+                    },
+                  )
+                : null,
             appBar: AppBar(
               title: Text(widgetList[_selectedIndex]['title']),
               actions: [
@@ -53,7 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     animationType: BadgeAnimationType.fade,
                   ),
                 ),
-                SizedBox(width: 20,),
+                SizedBox(
+                  width: 20,
+                ),
               ],
             ),
             body: Row(
@@ -91,8 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
 //                    },
 //                    duration: const Duration(milliseconds: 200),
 //                    key: ValueKey<int>(_selectedIndex),
-                    child: widgetList[_selectedIndex]['widget'],
-                  ),
+                  child: widgetList[_selectedIndex]['widget'],
+                ),
 //                ),
               ],
             ));
