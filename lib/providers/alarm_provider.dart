@@ -1,4 +1,3 @@
-import 'package:alert_manager/services/alarm_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
@@ -10,6 +9,11 @@ class AlarmProvider with ChangeNotifier {
   List<Alarm> _filteredAlarms = [];
   bool _isFetching = false;
 
+
+  AlarmProvider() {
+    fetchAlarms();
+  }
+
   List<Alarm> get alarms {
     return [..._alarms];
   }
@@ -19,6 +23,10 @@ class AlarmProvider with ChangeNotifier {
   }
 
   bool get isFetching => _isFetching;
+
+  int get activeAlarms {
+    return alarms.where((element) => element.isActive).length;
+  }
 
   void fetchAlarms() async {
     _isFetching = true;

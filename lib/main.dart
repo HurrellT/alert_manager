@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Badge(
-                    badgeContent: Text(_activeAlarms.toString()), //todo change to use prov
+                    badgeContent: Text(alarmsData.activeAlarms.toString()), //todo change to use prov
                     child: Icon(MaterialCommunityIcons.alarm_light_outline),
                     animationType: BadgeAnimationType.fade,
                   ),
@@ -81,8 +81,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   onDestinationSelected: (int index) {
                     setState(() {
                       _selectedIndex = index;
-                      if (index == 1)
-                        alarmsData.fetchAlarms();
                     });
                   },
                   labelType: NavigationRailLabelType.selected,
