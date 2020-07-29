@@ -2,9 +2,11 @@ import 'package:alert_manager/widgets/base_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:badges/badges.dart';
+import 'package:provider/provider.dart';
 
 import 'screens/alarm_screen.dart';
 import 'screens/dashboard_screen.dart';
+import 'providers/alarm_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,11 +15,14 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Clonefana',
-      theme: ThemeData.dark(),
-      home: MyHomePage(),
+    return ChangeNotifierProvider(
+      create: (ctx) => AlarmProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Clonefana',
+        theme: ThemeData.dark(),
+        home: MyHomePage(),
+      ),
     );
   }
 }
@@ -39,11 +44,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final alarmsData = Provider.of<AlarmProvider>(context);
+
     return BaseWidget(
       builder: (context, sizingInformation) {
         return Scaffold(
             floatingActionButton: _selectedIndex == 1
                 ? FloatingActionButton(
+                    child: Icon(Icons.add),
                     onPressed: () {
                       //add alarm
                     },
@@ -55,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Badge(
-                    badgeContent: Text(_activeAlarms.toString()),
+                    badgeContent: Text(_activeAlarms.toString()), //todo change to use prov
                     child: Icon(MaterialCommunityIcons.alarm_light_outline),
                     animationType: BadgeAnimationType.fade,
                   ),
@@ -73,6 +81,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   onDestinationSelected: (int index) {
                     setState(() {
                       _selectedIndex = index;
+                      if (index == 1)
+                        alarmsData.fetchAlarms();
                     });
                   },
                   labelType: NavigationRailLabelType.selected,
