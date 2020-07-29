@@ -9,7 +9,6 @@ class AlarmProvider with ChangeNotifier {
   List<Alarm> _filteredAlarms = [];
   bool _isFetching = false;
 
-
   AlarmProvider() {
     fetchAlarms();
   }
@@ -79,23 +78,21 @@ class AlarmProvider with ChangeNotifier {
 
   void setFilteredAlarms(
       {String statusFilter, String nameFilterControllerValue}) {
-    if (statusFilter == null) {
-      if (nameFilterControllerValue == '') {
-        _filteredAlarms = alarms;
-        notifyListeners();
-      } else {
-        _filteredAlarms = alarms
-            .where((element) => element.name
-                .toLowerCase()
-                .contains(nameFilterControllerValue.toLowerCase()))
-            .toList();
-        notifyListeners();
-      }
-    } else if (nameFilterControllerValue == null) {
+    if (nameFilterControllerValue == '') {
       _filteredAlarms = alarms
           .where((element) =>
               element.isActive.toString() == statusFilter ||
               statusFilter == 'All')
+          .toList();
+      notifyListeners();
+    } else {
+      _filteredAlarms = alarms
+          .where((element) =>
+              (element.isActive.toString() == statusFilter ||
+                  statusFilter == 'All') &&
+              element.name
+                  .toLowerCase()
+                  .contains(nameFilterControllerValue.toLowerCase()))
           .toList();
       notifyListeners();
     }

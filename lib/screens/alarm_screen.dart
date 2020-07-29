@@ -44,7 +44,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
               decoration: InputDecoration.collapsed(hintText: 'Alarm name'),
               onChanged: (value) {
                 setState(() {
-                  alarmsData.setFilteredAlarms(nameFilterControllerValue: value);
+                  alarmsData.setFilteredAlarms(statusFilter: _statusFilter, nameFilterControllerValue: value);
                 });
               },
             ),
@@ -72,7 +72,10 @@ class _AlarmScreenState extends State<AlarmScreen> {
                 ),
               ],
               onChanged: (String value) {
-                alarmsData.setFilteredAlarms(statusFilter: value);
+                setState(() {
+                  _statusFilter = value;
+                });
+                alarmsData.setFilteredAlarms(statusFilter: value, nameFilterControllerValue: _nameFilterController.value.text);
               },
             ),
           ),
