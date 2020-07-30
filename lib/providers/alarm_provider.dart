@@ -97,4 +97,9 @@ class AlarmProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void toggleAlarmStatus(Alarm alarm) {
+    alarms.firstWhere((element) => element == alarm).isActive = !alarm.isActive;
+    notifyListeners();
+  }
 }

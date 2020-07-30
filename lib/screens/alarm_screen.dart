@@ -3,8 +3,6 @@ import 'package:alert_manager/widgets/base_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../model/alarm.dart';
-
 class AlarmScreen extends StatefulWidget {
   @override
   _AlarmScreenState createState() => _AlarmScreenState();
@@ -13,7 +11,6 @@ class AlarmScreen extends StatefulWidget {
 class _AlarmScreenState extends State<AlarmScreen> {
   TextEditingController _nameFilterController;
   String _statusFilter;
-  Alarm _selectedAlarm;
 
   @override
   void initState() {
@@ -29,10 +26,8 @@ class _AlarmScreenState extends State<AlarmScreen> {
     super.dispose();
   }
 
-  _createTable() {}
-
   _createFilters(AlarmProvider alarmsData) {
-    return Row(
+    return Row( //todo change to column when less than 768 or screen is mobile
       children: [
         Expanded(
           flex: 2,
@@ -44,7 +39,9 @@ class _AlarmScreenState extends State<AlarmScreen> {
               decoration: InputDecoration.collapsed(hintText: 'Alarm name'),
               onChanged: (value) {
                 setState(() {
-                  alarmsData.setFilteredAlarms(statusFilter: _statusFilter, nameFilterControllerValue: value);
+                  alarmsData.setFilteredAlarms(
+                      statusFilter: _statusFilter,
+                      nameFilterControllerValue: value);
                 });
               },
             ),
@@ -75,7 +72,10 @@ class _AlarmScreenState extends State<AlarmScreen> {
                 setState(() {
                   _statusFilter = value;
                 });
-                alarmsData.setFilteredAlarms(statusFilter: value, nameFilterControllerValue: _nameFilterController.value.text);
+                alarmsData.setFilteredAlarms(
+                    statusFilter: value,
+                    nameFilterControllerValue:
+                        _nameFilterController.value.text);
               },
             ),
           ),
@@ -84,17 +84,9 @@ class _AlarmScreenState extends State<AlarmScreen> {
     );
   }
 
-  _addAlarm() {}
-
-  _updateAlarms() {}
-
-  _removeAlarm() {}
-
   @override
   Widget build(BuildContext context) {
     final alarmsData = Provider.of<AlarmProvider>(context);
-    alarmsData.setFilteredAlarms(statusFilter: _statusFilter,
-        nameFilterControllerValue: _nameFilterController.value.text);
     final _alarms = alarmsData.filteredAlarms;
     const _fontSize = TextStyle(fontSize: 20);
 
@@ -115,6 +107,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
                         DataColumn(label: Text("Metric")),
                         DataColumn(label: Text("Trigger")),
                         DataColumn(label: Text("Paused")),
+                        DataColumn(label: Text("Actions")),
                       ],
                       rows: [
                         ..._alarms
@@ -139,6 +132,34 @@ class _AlarmScreenState extends State<AlarmScreen> {
                                       style: _fontSize)),
                                   DataCell(Text(alarm.isActive.toString(),
                                       style: _fontSize)),
+                                  DataCell(Row(
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.edit),
+                                        tooltip: "Edit",
+                                        onPressed: () {
+//                                            alarmsData.editAlarm(alarm, newAlarm);
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.delete),
+                                        tooltip: "Delete",
+                                        onPressed: () {
+                                          alarmsData.removeAlarm(alarm);
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: alarm.isActive
+                                            ? Icon(Icons.pause)
+                                            : Icon(Icons.play_arrow),
+                                        tooltip:
+                                            alarm.isActive ? "Pause" : "Resume",
+                                        onPressed: () {
+                                          alarmsData.toggleAlarmStatus(alarm);
+                                        },
+                                      ),
+                                    ],
+                                  ))
                                 ]))
                             .toList()
                       ],

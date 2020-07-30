@@ -1,9 +1,11 @@
+import 'package:alert_manager/model/metric_type.dart';
 import 'package:alert_manager/widgets/base_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:badges/badges.dart';
 import 'package:provider/provider.dart';
 
+import 'model/alarm.dart';
 import 'screens/alarm_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'providers/alarm_provider.dart';
@@ -53,7 +55,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 ? FloatingActionButton(
                     child: Icon(Icons.add),
                     onPressed: () {
-                      //add alarm
+                      //todo open modal
+                      alarmsData.addAlarm(Alarm(name: "Test",
+                      source: "Test server",
+                      metric: MetricType.CPU_USAGE,
+                      greater: true,
+                      isActive: true,
+                      isTemp: false,
+                      trigger: 0.5));
                     },
                   )
                 : null,
