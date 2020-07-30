@@ -1,6 +1,7 @@
-import 'package:alert_manager/services/alarm_service.dart';
+import 'package:alert_manager/providers/alarm_provider.dart';
 import 'package:alert_manager/widgets/base_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../model/alarm.dart';
 
@@ -10,8 +11,6 @@ class AlarmScreen extends StatefulWidget {
 }
 
 class _AlarmScreenState extends State<AlarmScreen> {
-  List<Alarm> _alarms;
-  List<Alarm> _filteredAlarms;
   TextEditingController _nameFilterController;
   String _statusFilter;
   Alarm _selectedAlarm;
@@ -19,11 +18,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
   @override
   void initState() {
     super.initState();
-    AlarmService.getLocalAlarms().then((data) {
-      setState(() {
-        _alarms = _filteredAlarms = data;
-      });
-    });
+
     _nameFilterController = TextEditingController();
     _statusFilter = 'All';
   }
@@ -36,7 +31,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
 
   _createTable() {}
 
-  _createFilters() {
+  _createFilters(AlarmProvider alarmsData) {
     return Row(
       children: [
         Expanded(
@@ -49,13 +44,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
               decoration: InputDecoration.collapsed(hintText: 'Alarm name'),
               onChanged: (value) {
                 setState(() {
-                  _filteredAlarms = value == ''
-                      ? _alarms
-                      : _alarms
-                          .where((element) => element.name
-                              .toLowerCase()
-                              .contains(value.toLowerCase()))
-                          .toList();
+                  alarmsData.setFilteredAlarms(statusFilter: _statusFilter, nameFilterControllerValue: value);
                 });
               },
             ),
@@ -85,12 +74,8 @@ class _AlarmScreenState extends State<AlarmScreen> {
               onChanged: (String value) {
                 setState(() {
                   _statusFilter = value;
-                  _filteredAlarms = _alarms
-                      .where((element) =>
-                          element.isActive.toString() == _statusFilter ||
-                          _statusFilter == 'All')
-                      .toList();
                 });
+                alarmsData.setFilteredAlarms(statusFilter: value, nameFilterControllerValue: _nameFilterController.value.text);
               },
             ),
           ),
@@ -107,26 +92,19 @@ class _AlarmScreenState extends State<AlarmScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final alarmsData = Provider.of<AlarmProvider>(context);
+    alarmsData.setFilteredAlarms(statusFilter: _statusFilter,
+        nameFilterControllerValue: _nameFilterController.value.text);
+    final _alarms = alarmsData.filteredAlarms;
     const _fontSize = TextStyle(fontSize: 20);
+
     return BaseWidget(
       builder: (context, sizingInformation) {
         return Column(
           children: [
-            _createFilters(),
-//            Align(
-//              alignment: Alignment.centerLeft,
-//              child: Padding(
-//                padding: const EdgeInsets.all(20.0),
-//                child: Text(
-//                  'Alarms',
-//                  style: TextStyle(
-//                    fontSize: 24,
-//                  ),
-//                ),
-//              ),
-//            ),
+            _createFilters(alarmsData),
             Center(
-              child: _filteredAlarms == null
+              child: alarmsData.isFetching
                   ? CircularProgressIndicator()
                   : DataTable(
                       sortColumnIndex: 0,
@@ -139,7 +117,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
                         DataColumn(label: Text("Paused")),
                       ],
                       rows: [
-                        ..._filteredAlarms
+                        ..._alarms
                             .map((alarm) => DataRow(cells: [
                                   //todo: do a map with json data
                                   DataCell(Text(
