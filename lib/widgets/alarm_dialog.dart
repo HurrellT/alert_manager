@@ -46,6 +46,14 @@ class _AlarmDialogState extends State<AlarmDialog> {
   }
 
   @override
+  void dispose() {
+    _alarmNameFieldController.dispose();
+    _alarmSourceFieldController.dispose();
+    _triggerSourceFieldController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final alarmsData = Provider.of<AlarmProvider>(context);
 
@@ -55,121 +63,151 @@ class _AlarmDialogState extends State<AlarmDialog> {
         Form(
             key: _formKey,
             child: Column(children: <Widget>[
-              AlarmTextFormField(
-                controller: _alarmNameFieldController,
-                hintText: "Enter a name",
-                validatorText: "Please enter a name",
-              ),
-              AlarmTextFormField(
-                controller: _alarmSourceFieldController,
-                hintText: "Enter a source",
-                validatorText: "Please enter a source",
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: DropdownButtonFormField(
-                  value: _metricTypeDropdownValue,
-                  decoration: InputDecoration(hintText: "Choose a metric"),
-                  items: [
-                    ...MetricType.values.map((e) {
-                      return DropdownMenuItem(
-                        child: Text(e.toString()),
-                        //todo make a better print
-                        value: e,
-                      );
-                    }).toList()
-                  ],
-                  onChanged: (MetricType value) {
-                    setState(() {
-                      _metricTypeDropdownValue = value;
-                    });
-                  },
-                ),
-              ),
-              AlarmTextFormField(
-                controller: _triggerSourceFieldController,
-                hintText: "Enter a trigger point as float",
-                validatorText: "Please enter a trigger point as float",
-                keyboardType: TextInputType.number,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: DropdownButtonFormField(
-                  value: _isGreaterDropdownValue,
-                  decoration:
-                      InputDecoration(hintText: "Choose if grater or lower"),
-                  items: [
-                    DropdownMenuItem(
-                      child: Text(">"),
-                      value: true,
-                    ),
-                    DropdownMenuItem(
-                      child: Text("<"),
-                      value: false,
-                    ),
-                  ],
-                  onChanged: (bool value) {
-                    setState(() {
-                      _isGreaterDropdownValue = value;
-                    });
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: DropdownButtonFormField(
-                  value: _isTempDropdownValue,
-                  decoration:
-                      InputDecoration(hintText: "Choose temp or percentage"),
-                  items: [
-                    DropdownMenuItem(
-                      child: Text("°C"),
-                      value: true,
-                    ),
-                    DropdownMenuItem(
-                      child: Text("%"),
-                      value: false,
-                    ),
-                  ],
-                  onChanged: (bool value) {
-                    setState(() {
-                      _isTempDropdownValue = value;
-                    });
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: DropdownButtonFormField(
-                  value: _isActiveDropdownValue,
-                  decoration: InputDecoration(hintText: "Choose an option"),
-                  items: [
-                    DropdownMenuItem(
-                      child: Text("Active"),
-                      value: true,
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Paused"),
-                      value: false,
-                    ),
-                  ],
-                  onChanged: (bool value) {
-                    setState(() {
-                      _isActiveDropdownValue = value;
-                    });
-                  },
-                ),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  widget.editingMode
-                      ? validateAndEditAlarm(alarmsData, context)
-                      : validateAndAddAlarm(alarmsData, context);
-                },
-                child: Text(widget.editingMode ? "Edit" : 'Add'),
-              )
+              buildAlarmNameTextFormField(),
+              buildAlarmSourceTextFormField(),
+              buildMetricDropdownFormField(),
+              buildAlarmTriggerTextFormField(),
+              buildGreaterConditionDropdownFormField(),
+              buildTempOrPercentageDropdownFormField(),
+              buildAlarmStateDropdownFormField(),
+              buildSubmitButton(alarmsData, context)
             ]))
       ],
+    );
+  }
+
+  RaisedButton buildSubmitButton(
+      AlarmProvider alarmsData, BuildContext context) {
+    return RaisedButton(
+      onPressed: () {
+        widget.editingMode
+            ? validateAndEditAlarm(alarmsData, context)
+            : validateAndAddAlarm(alarmsData, context);
+      },
+      child: Text(widget.editingMode ? "Edit" : 'Add'),
+    );
+  }
+
+  Padding buildAlarmStateDropdownFormField() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: DropdownButtonFormField(
+        value: _isActiveDropdownValue,
+        decoration: InputDecoration(hintText: "Choose an alarm state"),
+        items: [
+          DropdownMenuItem(
+            child: Text("Active"),
+            value: true,
+          ),
+          DropdownMenuItem(
+            child: Text("Paused"),
+            value: false,
+          ),
+        ],
+        onChanged: (bool value) {
+          setState(() {
+            _isActiveDropdownValue = value;
+          });
+        },
+      ),
+    );
+  }
+
+  Padding buildTempOrPercentageDropdownFormField() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: DropdownButtonFormField(
+        value: _isTempDropdownValue,
+        decoration: InputDecoration(hintText: "Choose temp or percentage"),
+        items: [
+          DropdownMenuItem(
+            child: Text("°C"),
+            value: true,
+          ),
+          DropdownMenuItem(
+            child: Text("%"),
+            value: false,
+          ),
+        ],
+        onChanged: (bool value) {
+          setState(() {
+            _isTempDropdownValue = value;
+          });
+        },
+      ),
+    );
+  }
+
+  Padding buildGreaterConditionDropdownFormField() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: DropdownButtonFormField(
+        value: _isGreaterDropdownValue,
+        decoration: InputDecoration(hintText: "Choose if grater or lower"),
+        items: [
+          DropdownMenuItem(
+            child: Text(">"),
+            value: true,
+          ),
+          DropdownMenuItem(
+            child: Text("<"),
+            value: false,
+          ),
+        ],
+        onChanged: (bool value) {
+          setState(() {
+            _isGreaterDropdownValue = value;
+          });
+        },
+      ),
+    );
+  }
+
+  AlarmTextFormField buildAlarmTriggerTextFormField() {
+    return AlarmTextFormField(
+      controller: _triggerSourceFieldController,
+      hintText: "Enter a trigger point as float",
+      validatorText: "Please enter a trigger point as float",
+      keyboardType: TextInputType.number,
+    );
+  }
+
+  Padding buildMetricDropdownFormField() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: DropdownButtonFormField(
+        value: _metricTypeDropdownValue,
+        decoration: InputDecoration(hintText: "Choose a metric"),
+        items: [
+          ...MetricType.values.map((e) {
+            return DropdownMenuItem(
+              child: Text(MetricTypeNames[e]),
+              value: e,
+            );
+          }).toList()
+        ],
+        onChanged: (MetricType value) {
+          setState(() {
+            _metricTypeDropdownValue = value;
+          });
+        },
+      ),
+    );
+  }
+
+  AlarmTextFormField buildAlarmSourceTextFormField() {
+    return AlarmTextFormField(
+      controller: _alarmSourceFieldController,
+      hintText: "Enter a source",
+      validatorText: "Please enter a source",
+    );
+  }
+
+  AlarmTextFormField buildAlarmNameTextFormField() {
+    return AlarmTextFormField(
+      controller: _alarmNameFieldController,
+      hintText: "Enter a name",
+      validatorText: "Please enter a name",
     );
   }
 

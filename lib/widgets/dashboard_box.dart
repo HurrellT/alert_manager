@@ -18,9 +18,9 @@ class DashboardBox extends StatelessWidget {
           child: Card(
             child: Center(
                 child: Text(
-                  widgetText,
-                  style: TextStyle(fontSize: 24),
-                )),
+              widgetText,
+              style: TextStyle(fontSize: 24),
+            )),
           ),
         );
       },
