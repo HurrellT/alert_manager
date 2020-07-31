@@ -2,6 +2,8 @@
 
 A Grafana alert manager basic clone.
 
+## See it running [here](alert-manager.surge.sh)
+
 ### Requirements
 
 - To run this app you will need to install the [flutter dev tools](https://flutter.dev/docs/get-started/install).
