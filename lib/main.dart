@@ -11,7 +11,7 @@ import 'screens/dashboard_screen.dart';
 import 'providers/alarm_provider.dart';
 import 'widgets/alarm_dialog.dart';
 
-//TODO EXTRAER EL DIALOG , HACER QUE EL EDIT LO USE, HACER QUE LOS CARDS MUESTREN INFO , REFACTORIZAR Y HACER TESTS
+//todo HACER QUE LOS CARDS MUESTREN INFO , REFACTORIZAR Y HACER TESTS
 
 void main() {
   runApp(MyApp());
