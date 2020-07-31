@@ -1,4 +1,5 @@
 import 'package:alert_manager/providers/alarm_provider.dart';
+import 'package:alert_manager/widgets/alarm_dialog.dart';
 import 'package:alert_manager/widgets/base_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +28,8 @@ class _AlarmScreenState extends State<AlarmScreen> {
   }
 
   _createFilters(AlarmProvider alarmsData) {
-    return Row( //todo change to column when less than 768 or screen is mobile
+    return Row(
+      //todo change to column when less than 768 or screen is mobile
       children: [
         Expanded(
           flex: 2,
@@ -112,7 +114,6 @@ class _AlarmScreenState extends State<AlarmScreen> {
                       rows: [
                         ..._alarms
                             .map((alarm) => DataRow(cells: [
-                                  //todo: do a map with json data
                                   DataCell(Text(
                                     alarm.name,
                                     style: _fontSize,
@@ -138,7 +139,13 @@ class _AlarmScreenState extends State<AlarmScreen> {
                                         icon: Icon(Icons.edit),
                                         tooltip: "Edit",
                                         onPressed: () {
-//                                            alarmsData.editAlarm(alarm, newAlarm);
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlarmDialog(
+                                                    editingMode: true,
+                                                    alarm: alarm);
+                                              });
                                         },
                                       ),
                                       IconButton(

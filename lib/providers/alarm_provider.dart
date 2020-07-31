@@ -102,4 +102,16 @@ class AlarmProvider with ChangeNotifier {
     alarms.firstWhere((element) => element == alarm).isActive = !alarm.isActive;
     notifyListeners();
   }
+
+  void editAlarm(Alarm alarm, Alarm newAlarm) {
+    Alarm alarmToUpdate = _alarms.firstWhere((element) => element == alarm);
+    alarmToUpdate.name = newAlarm.name;
+    alarmToUpdate.isActive = newAlarm.isActive;
+    alarmToUpdate.isTemp = newAlarm.isTemp;
+    alarmToUpdate.greater = newAlarm.greater;
+    alarmToUpdate.metric = newAlarm.metric;
+    alarmToUpdate.source = newAlarm.source;
+    alarmToUpdate.trigger = newAlarm.trigger;
+    notifyListeners();
+  }
 }
