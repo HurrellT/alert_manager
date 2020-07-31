@@ -2,7 +2,7 @@
 
 A Grafana alert manager basic clone.
 
-## See it running [here](alert-manager.surge.sh)
+## See it running [here](https://alert-manager.surge.sh)
 
 ### Requirements
 
