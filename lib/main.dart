@@ -4,8 +4,6 @@ import 'package:provider/provider.dart';
 import 'screens/main_screen.dart';
 import 'providers/alarm_provider.dart';
 
-//todo HACER TESTS, DOCUMENTAR EL README PARA QUE PUEDAN LEVANTARLO
-
 void main() {
   runApp(MyApp());
 }

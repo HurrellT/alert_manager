@@ -1,16 +1,41 @@
 # alert_manager
 
-A new Flutter project.
+A Grafana alert manager basic clone.
 
-## Getting Started
+### Requirements
 
-This project is a starting point for a Flutter application.
+- To run this app you will need to install the [flutter dev tools](https://flutter.dev/docs/get-started/install).
+I recommend to install Flutter master and [enable web](https://flutter.dev/docs/get-started/web) and [desktop support](https://flutter.dev/desktop) by running 
 
-A few resources to get you started if this is your first Flutter project:
+    *For desktop run*
+    
+    `flutter config --enable-macos-desktop`
+    
+    `flutter config --enable-linux-desktop`
+    
+    then
+    
+    `flutter run -d macos`
+    
+    `flutter run -d linux`
+    
+    *For web run *
+    
+    ` flutter config --enable-web` 
+    
+    then 
+    
+    `flutter run -d chrome` 
+    
+    to run it with Chrome (You need to have Chrome installed) 
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- You'll also need to install Android Studio for the Android SDK. The Flutter installation guide will guide you, and you can see what you need to install by running `flutter doctor` after extracting the flutter sdk tools.
 
-For help getting started with Flutter, view our
+### Important packages used
+
+- Provider / I decided to use Provider to manage the state of the app across the entire application.
+
+
+For help getting started with Flutter, view 
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
